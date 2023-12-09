@@ -14,7 +14,13 @@ function M.on_tab_enter()
     local buf_nums = M.cache[tab]
     if buf_nums then
         for _, k in pairs(buf_nums) do
-            vim.api.nvim_buf_set_option(k, "buflisted", true)
+            -- vim.api.nvim_buf_set_option(k, "buflisted", true)
+            --             --# forked for the following crash:
+            -- # Error executing lua callback: ...e/k/.local/share/nvim/lazy/scope.nvim/lua/scope/core.lua:17: Invalid buffer id: 142
+            -- # stack traceback:
+            -- # 	[C]: in function 'nvim_buf_set_option'
+            -- # 	...e/k/.local/share/nvim/lazy/scope.nvim/lua/scope/core.lua:17: in function <...e/k/.local/share/nvim/lazy/scope.nvim/lua/scope/core.lua:12>
+            pcall(vim.api.nvim_buf_set_option, k, "buflisted", true)
         end
     end
 end
